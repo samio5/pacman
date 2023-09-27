@@ -7,9 +7,42 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     /* height: 100vh; */
 }
 
 .heading {
     color: white;
+    position: absolute;
+    top: 0;
+    left: 130px;
+    font-size: 25px;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 560px;
+    height: 560px;
+    border: solid white 2px;
+}
+
+.grid div {
+    width: 20px;
+    height: 20px;
+}
+
+.pac-dot {
+    background-color: red;
+    border: 5px solid white;
+    box-sizing: border-box;
+}
+
+.wall {
+    background-color: blue;
+}
+
+.power-pellet {
+    background-color: green;
+    border-radius: 10px;
 }
