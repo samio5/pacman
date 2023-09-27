@@ -1,0 +1,15 @@
+body {
+    background-color: rgb(48, 52, 67);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh; */
+}
+
+.heading {
+    color: white;
+}
