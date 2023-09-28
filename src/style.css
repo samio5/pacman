@@ -24,7 +24,7 @@ body {
     flex-wrap: wrap;
     width: 560px;
     height: 560px;
-    border: solid white 2px;
+    border: solid black ;
 }
 
 .grid div {
@@ -47,7 +47,15 @@ body {
     border-radius: 10px;
 }
 
+/* .ghost-lair {
+    background-color: white;
+} */
+
+/* .empty {
+    background-color: white;
+} */
+
 .pac-man {
-    background-color: gold;
+    background-color: yellow;
     border-radius: 10px;
 }
