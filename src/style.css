@@ -1,21 +1,21 @@
 body {
-    background-color: rgb(48, 52, 67);
+    /* background-color: rgb(48, 52, 67); */
     font-family: 'JetBrains Mono', monospace;
 }
 
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* flex-direction: column; */
     /* height: 100vh; */
 }
 
 .heading {
-    color: white;
-    position: absolute;
-    top: 0;
-    left: 130px;
+    /* color: white; */
+    /* position: absolute; */
+    /* top: 0; */
+    /* left: 130px; */
     font-size: 25px;
 }
 
