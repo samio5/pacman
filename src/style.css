@@ -3,19 +3,19 @@ body {
     font-family: 'JetBrains Mono', monospace;
 }
 
-/* .container {
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     height: 100vh;
-} */
+}
 
 .heading {
     color: white;
-    /* position: absolute; */
-    /* top: 0; */
-    /* left: 130px; */
+    position: absolute;
+    top: 0;
+    left: 130px;
     font-size: 25px;
 }
 

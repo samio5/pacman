@@ -93,7 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     if(pacmanCurrentIndex -1 === 363) {
                         pacmanCurrentIndex = 391
                     }
-
                 break;
             case 38:
                 if(pacmanCurrentIndex - width >= 0 && 
@@ -109,7 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     if(pacmanCurrentIndex +1 === 392) {
                         pacmanCurrentIndex = 364
                     }
-
                 break;
             case 40:
                 if(pacmanCurrentIndex + width < width * width && 
@@ -130,9 +128,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    //what happens when you eat a power pellet
     function powerPelletEaten() {
-
+        if (squares[pacmanCurrentIndex].classList.contains("power-pellet")) {
+            score += 10
+            ghosts.forEach(ghost => ghost.isScared = true)
+            setTimeout(unScaredGhosts, 10000)
+            squares[pacmanCurrentIndex].classList.remove("power-pellet")
+        }
     }
+
+    //make the ghosts stop appearing as scared (aquamarine)
+    function unScaredGhosts() {
+        ghosts.forEach(ghosts => ghost.isScared = false)
+    }
+
 
     //create our Ghost template
     class Ghost {
@@ -142,6 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
             this.speed = speed
             this.currentIndex = startIndex
             this.timerID = NaN
+            this.isScared = false
         }
     }
 
