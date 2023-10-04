@@ -1,18 +1,18 @@
 body {
-    /* background-color: rgb(48, 52, 67); */
+    background-color: rgb(48, 52, 67);
     font-family: 'JetBrains Mono', monospace;
 }
 
-.container {
-    /* display: flex; */
-    /* justify-content: center; */
-    /* align-items: center; */
-    /* flex-direction: column; */
-    /* height: 100vh; */
-}
+/* .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+} */
 
 .heading {
-    /* color: white; */
+    color: white;
     /* position: absolute; */
     /* top: 0; */
     /* left: 130px; */
@@ -24,7 +24,7 @@ body {
     flex-wrap: wrap;
     width: 560px;
     height: 560px;
-    border: solid black ;
+    border: 3px solid black;
 }
 
 .grid div {
@@ -45,6 +45,31 @@ body {
 .power-pellet {
     background-color: green;
     border-radius: 10px;
+}
+
+.blinky {
+    background-color: red;
+    border: 0;
+}
+
+.pinky {
+    background-color: pink;
+    border: 0;
+}
+
+.inky {
+    background-color: cyan;
+    border: 0;
+}
+
+.clyde {
+    background-color: orange;
+    border: 0;
+}
+
+.scared-ghost {
+    background-color: aquamarine;
+    border: 0;
 }
 
 /* .ghost-lair {
