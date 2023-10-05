@@ -21,10 +21,11 @@ body {
 
 .grid {
     display: flex;
+    background-color: black;
     flex-wrap: wrap;
     width: 560px;
     height: 560px;
-    border: 3px solid black;
+    border: 5px solid black;
 }
 
 .grid div {
@@ -34,7 +35,7 @@ body {
 
 .pac-dot {
     background-color: red;
-    border: 5px solid rgb(48, 52, 67);
+    border: 5px solid black;
     box-sizing: border-box;
 }
 
@@ -77,7 +78,7 @@ body {
 } */
 
 /* .empty {
-    background-color: white;
+    background-color: black;
 } */
 
 .pacman {

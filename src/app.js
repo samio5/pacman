@@ -60,6 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 squares[i].classList.add("ghost-lair")
             } else if (layout[i] === 3) {
                 squares[i].classList.add("power-pellet")
+            } else if (layout[i] === 4) {
+                squares[i].classList.add("empty")
             }
         }
     }
@@ -140,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 break;
                 
-                
+
             case 40:
                 if(pacmanCurrentIndex + width < width * width && 
                     !squares[pacmanCurrentIndex +width].classList.contains("wall") && 
@@ -265,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     //check for a win
     function checkForWin() {
-        if (score === 274) {
+        if (score >= 274) {
             ghosts.forEach(ghost => clearInterval(ghost.timerID))
             document.removeEventListener("keydown", movePacman)
             scoreDisplay.innerHTML = " YOU WON!"
