@@ -13,9 +13,6 @@ body {
 
 .heading {
     color: white;
-    /* position: absolute; */
-    /* top: 0; */
-    /* left: 130px; */
     font-size: 25px;
 }
 
@@ -72,14 +69,6 @@ body {
     background-color: aquamarine;
     border: 0;
 }
-
-/* .ghost-lair {
-    background-color: white;
-} */
-
-/* .empty {
-    background-color: black;
-} */
 
 .pacman {
     background-color: yellow;
