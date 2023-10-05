@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const grid = document.querySelector(".grid")
     const scoreDisplay = document.getElementById("score")
+    const heading = document.getElementsByClassName("heading")
     const width = 28 // 28 x 28 = 784 squares.
     let score = 0
 
@@ -67,18 +68,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // starting position of pacman
     let pacmanCurrentIndex = 490
-    squares[pacmanCurrentIndex].classList.add("pac-man")
+    squares[pacmanCurrentIndex].classList.add("pacman")
 
     // move pacman
     function movePacman(e) {
-        squares[pacmanCurrentIndex].classList.remove("pac-man")
+        squares[pacmanCurrentIndex].classList.remove("pacman")
 
         switch(e.keyCode) {
             /**
              * A = 65
              * W = 87
-             * S = 83
              * D = 68
+             * S = 83
              * 37	Arrow Left
              * 38	Arrow Up
              * 39	Arrow Right
@@ -94,11 +95,30 @@ document.addEventListener("DOMContentLoaded", () => {
                         pacmanCurrentIndex = 391
                     }
                 break;
+            case 65:
+                if(pacmanCurrentIndex % width !== 0 && 
+                    !squares[pacmanCurrentIndex -1].classList.contains("wall") &&
+                    !squares[pacmanCurrentIndex -1].classList.contains("ghost-lair")) pacmanCurrentIndex -=1
+
+                    //check if pacman is in the left exit
+                    if(pacmanCurrentIndex -1 === 363) {
+                        pacmanCurrentIndex = 391
+                    }
+                break;
+
+
             case 38:
                 if(pacmanCurrentIndex - width >= 0 && 
                     !squares[pacmanCurrentIndex -width].classList.contains("wall") &&
                     !squares[pacmanCurrentIndex -width].classList.contains("ghost-lair")) pacmanCurrentIndex -=width
                 break;
+            case 87:
+                if(pacmanCurrentIndex - width >= 0 && 
+                    !squares[pacmanCurrentIndex -width].classList.contains("wall") &&
+                    !squares[pacmanCurrentIndex -width].classList.contains("ghost-lair")) pacmanCurrentIndex -=width
+                break;
+
+
             case 39:
                 if(pacmanCurrentIndex % width < width -1 && 
                     !squares[pacmanCurrentIndex +1].classList.contains("wall") && 
@@ -109,15 +129,39 @@ document.addEventListener("DOMContentLoaded", () => {
                         pacmanCurrentIndex = 364
                     }
                 break;
+            case 68:
+                if(pacmanCurrentIndex % width < width -1 && 
+                    !squares[pacmanCurrentIndex +1].classList.contains("wall") && 
+                    !squares[pacmanCurrentIndex +1].classList.contains("ghost-lair")) pacmanCurrentIndex +=1
+
+                    //check if pacman is in the right exit
+                    if(pacmanCurrentIndex +1 === 392) {
+                        pacmanCurrentIndex = 364
+                    }
+                break;
+                
+                
             case 40:
                 if(pacmanCurrentIndex + width < width * width && 
                     !squares[pacmanCurrentIndex +width].classList.contains("wall") && 
                     !squares[pacmanCurrentIndex +width].classList.contains("ghost-lair")) pacmanCurrentIndex +=width
                 break;
+            case 83:
+                if(pacmanCurrentIndex + width < width * width && 
+                    !squares[pacmanCurrentIndex +width].classList.contains("wall") && 
+                    !squares[pacmanCurrentIndex +width].classList.contains("ghost-lair")) pacmanCurrentIndex +=width
+                break;
         }
+        squares[pacmanCurrentIndex].classList.add("pacman")
+        pacDotEaten()
+        powerPelletEaten()
+        checkForGameOver()
+        checkForWin()
     }
+    document.addEventListener("keydown", movePacman)
 
-    squares[pacmanCurrentIndex].classList.add("pac-man")
+
+    squares[pacmanCurrentIndex].classList.add("pacman")
 
     // what happens when pacman eats a pac-dot
     function pacDotEaten() {
@@ -140,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //make the ghosts stop appearing as scared (aquamarine)
     function unScaredGhosts() {
-        ghosts.forEach(ghosts => ghost.isScared = false)
+        ghosts.forEach(ghost => ghost.isScared = false)
     }
 
 
@@ -191,14 +235,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 //else find a new direction to try
             } else direction = directions[Math.floor(Math.random() * directions.length)]
+
+            //if the ghost is currently scared, change their color and behaviour
+            if (ghost.isScared) {
+                squares[ghost.currentIndex].classList.add("scared-ghost")
+            }
+
+            //if the ghost is scared and pacman runs towards it
+            if (ghost.isScared && squares[ghost.currentIndex].classList.contains("pacman")) {
+                squares[ghost.currentIndex].classList.remove(ghost.className, "ghost", "scared-ghost")
+                ghost.currentIndex = ghost.startIndex
+                score += 100
+                squares[ghost.currentIndex].classList.add(ghost.className, "ghost")
+            }
+            checkForGameOver()
         }, ghost.speed)
     }
 
-
+    //check for a game over
+    function checkForGameOver() {
+        if (squares[pacmanCurrentIndex].classList.contains("ghost") && !squares[pacmanCurrentIndex].classList.contains("scared-ghost")) {
+            ghosts.forEach(ghost => clearInterval(ghost.timerID))
+            document.removeEventListener("keydown", movePacman)
+            // setTimeout(function(){alert("Game Over")}, 200)
+            scoreDisplay.innerHTML = " ITS JOEVER!"
+            setTimeout(function(){window.location.reload()}, 5000)
+        }
+    }
     
-    //checkForGameOver()
-    //checkForWin()
-
-    document.addEventListener("keydown", movePacman)
+    //check for a win
+    function checkForWin() {
+        if (score === 274) {
+            ghosts.forEach(ghost => clearInterval(ghost.timerID))
+            document.removeEventListener("keydown", movePacman)
+            scoreDisplay.innerHTML = " YOU WON!"
+            setTimeout(function(){window.location.reload()}, 5000)
+        }
+    }
 
 })
