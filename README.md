@@ -1,4 +1,4 @@
-# Pacman
+# :yellow_circle: Pacman
 A Pacman clone made with Javascript, CSS and HTML.
 
 ### Objective:
