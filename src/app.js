@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
     const grid = document.querySelector(".grid")
     const scoreDisplay = document.getElementById("score")
-    const heading = document.getElementsByClassName("heading")
     const width = 28 // 28 x 28 = 784 squares.
     let score = 0
 
-    // layout of grid and what is in the squares.
+    //! GRID LAYOUT
+    //* layout of grid and what is in the squares.
     const layout = [
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -42,9 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3 - power-pellet
     // 4 - empty
 
+    //* empty array to store the squares that will be represented in the grid as walls, pac-dots, ghost-lair section, power-pellets etc
     const squares = []
 
-    //* draw the grid and render it.
+    //! GRID DRAWING
+    //* draw the grid and render it. 
     function createBoard() {
         for (let i = 0; i < layout.length; i++) {
             const square = document.createElement('div')
@@ -66,11 +68,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     createBoard()
 
-    // starting position of pacman
+    //! PACMAN DRAWING
+    //* starting position of pacman
     let pacmanCurrentIndex = 490
     squares[pacmanCurrentIndex].classList.add("pacman")
 
-    // move pacman
+    //! PACMAN MOVEMENT
+    //* move pacman
     function movePacman(e) {
         squares[pacmanCurrentIndex].classList.remove("pacman")
 
@@ -163,7 +167,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     squares[pacmanCurrentIndex].classList.add("pacman")
 
-    // what happens when pacman eats a pac-dot
+    //! PACMAN EATING PAC-DOT
+    //* what happens when pacman eats a pac-dot
     function pacDotEaten() {
         if(squares[pacmanCurrentIndex].classList.contains("pac-dot")) {
             score++
@@ -172,7 +177,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    //what happens when you eat a power pellet
+    //! PACMAN EATING POWER-PELLET & SCARED-GHOST TIMEOUT
+    //* what happens when you eat a power pellet
     function powerPelletEaten() {
         if (squares[pacmanCurrentIndex].classList.contains("power-pellet")) {
             score += 10
@@ -182,13 +188,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    //make the ghosts stop appearing as scared (aquamarine)
+    //! UNSCARE GHOST
+    //* make the ghosts stop appearing as scared (aquamarine)
     function unScaredGhosts() {
         ghosts.forEach(ghost => ghost.isScared = false)
     }
 
 
-    //create our Ghost template
+    //! GHOST TEMPLATE CONSTRUCTOR
     class Ghost {
         constructor(className, startIndex, speed) {
             this.className = className
@@ -207,52 +214,92 @@ document.addEventListener("DOMContentLoaded", () => {
         new Ghost("clyde", 379, 500)
     ]
 
-    //draw my ghosts onto the grid
+    //! GHOST DRAWING ON GRID
     ghosts.forEach(ghost => {
         squares[ghost.currentIndex].classList.add(ghost.className)
         squares[ghost.currentIndex].classList.add("ghost")
     })
 
-    //move all the ghosts randomly
+    //! GHOST LOGIC
+    //*add logic to ghost movement to hunt for pacman
+    //*get coordinates of ghosts and pacman
+
+    function getCoordinates(index) {
+        return [index % width, Math.floor(index / width)]
+    }
+
+    // console.log(getCoordinates(502))
+
+    //! GHOST MOVEMENT original
+    //* move all the ghosts randomly
     ghosts.forEach(ghost => moveGhost(ghost))
 
-    //write the function to move the ghosts
+    //* write the function to move the ghosts
     function moveGhost(ghost) {
-    const directions = [-1, +1, width, -width]
-    let direction = directions[Math.floor(Math.random() * directions.length)]
+        const directions = [-1, +1, width, -width]
+        let direction = directions[Math.floor(Math.random() * directions.length)]
+        //* ghosttimerid is zero
+        let ghostTimerID = NaN
+
         ghost.timerID = setInterval(function(){
             //if the next square your ghost is going to go in does NOT contain a wall and a ghost, you can go there
             if (!squares[ghost.currentIndex + direction].classList.contains("wall") && !squares[ghost.currentIndex + direction].classList.contains("ghost")) {
-                //you can go here
-                //remove all ghost related classes
+                //you can go here, remove all ghost related classes
                 squares[ghost.currentIndex].classList.remove(ghost.className, "ghost", "scared-ghost")
 
-                //change the currentindex to the new safe square
-                ghost.currentIndex += direction
+                //* check if the new space is closer to pacman
+                const [ghostX, ghostY] = getCoordinates(ghost.currentIndex)
+                const [pacmanX, pacmanY] = getCoordinates(pacmanCurrentIndex)
+                const [ghostNewX, ghostNewY] = getCoordinates(ghost.currentIndex + direction)
 
-                //redraw the ghost in the new safe space
-                squares[ghost.currentIndex].classList.add(ghost.className, "ghost")
+                function isXCordCloser() {
+                    if ((ghostNewX - pacmanX) > (ghostX - pacmanX)) {
+                        return true
+                    } else return false
+                }
+
+                function isYCordCloser() {
+                    if ((ghostNewY - pacmanY) > (ghostY - pacmanY)) {
+                        return true
+                    } else return false
+                }
+
+                if (isXCordCloser() || isYCordCloser()) {
+                    ghost.currentIndex += direction
+                    squares[ghost.currentIndex].classList.add(ghost.className, "ghost", "scared-ghost")
+
+                } else {
+                    squares[ghost.currentIndex].classList.add(ghost.className, "ghost", "scared-ghost")
+                    direction = directions[Math.floor(Math.random() * directions.length)]
+                }
 
                 //else find a new direction to try
+                
+                squares[ghost.currentIndex].classList.add(ghost.className, "ghost", "scared-ghost")
             } else direction = directions[Math.floor(Math.random() * directions.length)]
 
-            //if the ghost is currently scared, change their color and behaviour
+            
+            //* if the ghost is currently scared, change their color and behaviour
             if (ghost.isScared) {
                 squares[ghost.currentIndex].classList.add("scared-ghost")
             }
-
-            //if the ghost is scared and pacman runs towards it
+            
+            //* if the ghost is scared and pacman runs towards it
             if (ghost.isScared && squares[ghost.currentIndex].classList.contains("pacman")) {
                 squares[ghost.currentIndex].classList.remove(ghost.className, "ghost", "scared-ghost")
                 ghost.currentIndex = ghost.startIndex
                 score += 100
                 squares[ghost.currentIndex].classList.add(ghost.className, "ghost")
             }
+
+            //* stop game when pacman is present in the same square as ghost, essentially ghost eats pacman
+            if (squares[ghost.currentIndex].classList.contains("pacman")) clearInterval(ghostTimerID)
+
             checkForGameOver()
         }, ghost.speed)
     }
 
-    //check for a game over
+    //! CHECK FOR GAME OVER
     function checkForGameOver() {
         if (squares[pacmanCurrentIndex].classList.contains("ghost") && !squares[pacmanCurrentIndex].classList.contains("scared-ghost")) {
             ghosts.forEach(ghost => clearInterval(ghost.timerID))
@@ -263,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     
-    //check for a win
+    //! CHECK FOR WIN
     function checkForWin() {
         if (score >= 274) {
             ghosts.forEach(ghost => clearInterval(ghost.timerID))
