@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ghosts.forEach(ghost => clearInterval(ghost.timerID))
             document.removeEventListener("keydown", movePacman)
             // setTimeout(function(){alert("Game Over")}, 200)
-            scoreDisplay.innerHTML = " ITS JOEVER!"
+            scoreDisplay.innerHTML = " YOU DIED"
             setTimeout(function(){window.location.reload()}, 5000)
         }
     }
